@@ -728,6 +728,215 @@
       }
     ];
 
+    // ---------------- English grammar question bank ----------------
+    // Skills follow the class-3 grammar book (nouns, singular/plural, gender),
+    // plus collective and material nouns. The word lists are hand-checked
+    // because grammar answers are idiomatic, not computable: articles follow
+    // sound ("an hour", "a university") and plurals are often irregular.
+    const ARTICLE_WORDS = [
+      ["apple", "an"], ["orange", "an"], ["egg", "an"], ["umbrella", "an"], ["ice cream", "an"],
+      ["elephant", "an"], ["igloo", "an"], ["owl", "an"], ["hour", "an"], ["honest man", "an"],
+      ["ant", "an"], ["island", "an"], ["envelope", "an"], ["ostrich", "an"], ["idea", "an"],
+      ["book", "a"], ["cat", "a"], ["desk", "a"], ["school", "a"], ["pencil", "a"],
+      ["university", "a"], ["uniform", "a"], ["unicorn", "a"], ["one-rupee coin", "a"],
+      ["house", "a"], ["horse", "a"], ["hospital", "a"], ["yellow bus", "a"], ["mango", "a"]
+    ];
+
+    const PLURALS = [
+      ["book", "books"], ["cat", "cats"], ["chair", "chairs"], ["garden", "gardens"], ["street", "streets"],
+      ["bus", "buses"], ["box", "boxes"], ["brush", "brushes"], ["watch", "watches"], ["torch", "torches"],
+      ["baby", "babies"], ["city", "cities"], ["story", "stories"], ["lady", "ladies"], ["pony", "ponies"],
+      ["valley", "valleys"], ["tray", "trays"], ["essay", "essays"], ["toy", "toys"], ["day", "days"],
+      ["leaf", "leaves"], ["knife", "knives"], ["wolf", "wolves"], ["shelf", "shelves"], ["calf", "calves"],
+      ["roof", "roofs"], ["cliff", "cliffs"],
+      ["mango", "mangoes"], ["potato", "potatoes"], ["tomato", "tomatoes"], ["hero", "heroes"],
+      ["child", "children"], ["man", "men"], ["woman", "women"], ["foot", "feet"], ["tooth", "teeth"],
+      ["mouse", "mice"], ["goose", "geese"], ["ox", "oxen"],
+      ["sheep", "sheep"], ["deer", "deer"], ["fish", "fish"]
+    ];
+
+    const GENDER_PAIRS = [
+      ["king", "queen"], ["prince", "princess"], ["actor", "actress"], ["lion", "lioness"],
+      ["tiger", "tigress"], ["uncle", "aunt"], ["nephew", "niece"], ["father", "mother"],
+      ["brother", "sister"], ["son", "daughter"], ["husband", "wife"], ["boy", "girl"],
+      ["man", "woman"], ["cock", "hen"], ["drake", "duck"], ["stag", "doe"],
+      ["wizard", "witch"], ["sir", "madam"], ["waiter", "waitress"], ["host", "hostess"],
+      ["grandfather", "grandmother"], ["bull", "cow"], ["horse", "mare"], ["landlord", "landlady"],
+      ["bridegroom", "bride"], ["monk", "nun"], ["emperor", "empress"], ["hero", "heroine"]
+    ];
+
+    const COMMON_GENDER = ["teacher", "student", "doctor", "friend", "parent", "cousin", "singer",
+      "artist", "neighbour", "child", "principal", "journalist", "person", "baby", "carpenter", "florist"];
+    const NEUTER_GENDER = ["desk", "chair", "book", "table", "window", "pencil", "bus", "tree",
+      "river", "fan", "computer", "wall", "plate", "lake", "grass", "box", "duster", "blackboard"];
+
+    const COLLECTIVE = [
+      ["lions", "pride"], ["birds", "flock"], ["sheep", "flock"], ["cows", "herd"], ["elephants", "herd"],
+      ["wolves", "pack"], ["fish", "school"], ["bees", "swarm"], ["ants", "army"], ["puppies", "litter"],
+      ["flowers", "bunch"], ["grapes", "bunch"], ["keys", "bunch"], ["stars", "cluster"], ["ships", "fleet"],
+      ["singers", "choir"], ["players", "team"], ["musicians", "band"], ["soldiers", "army"], ["students", "class"]
+    ];
+
+    const MATERIAL = [
+      ["ring", "gold"], ["chair", "wood"], ["window", "glass"], ["shirt", "cotton"], ["bangle", "glass"],
+      ["spoon", "steel"], ["pot", "clay"], ["sweater", "wool"], ["bottle", "plastic"], ["wall", "brick"],
+      ["coin", "silver"], ["tyre", "rubber"], ["saree", "silk"], ["statue", "stone"], ["bread", "flour"]
+    ];
+
+    const PEOPLE = ["Rahul", "Meera", "Ravi", "Aisha", "Kabir", "Naina", "Arjun"];
+    const PLACE_NAMES = ["Delhi", "Chennai", "Shimla", "India", "Assam", "Jaipur", "Kerala"];
+    const DAYS_MONTHS = ["Monday", "Sunday", "February", "August", "Diwali", "Holi"];
+    const PROPER_NOUNS = [...PEOPLE, ...PLACE_NAMES, ...DAYS_MONTHS, "Ganga", "Taj Mahal"];
+    const COMMON_NOUNS = ["city", "boy", "country", "day", "month", "river", "festival",
+      "monument", "girl", "teacher", "village", "school", "market", "garden", "bridge"];
+    const VERBS = ["run", "sing", "jump", "write", "eat", "sleep", "dance", "read", "swim", "laugh"];
+    const ADJECTIVES = ["happy", "tall", "red", "cold", "noisy", "brave", "soft", "tiny", "sweet", "bright"];
+    const CATEGORIES = [
+      ["bird", ["dove", "seagull", "robin", "kingfisher", "mynah", "ostrich"]],
+      ["tree", ["birch", "maple", "cedar", "willow", "banyan", "neem"]],
+      ["flower", ["tulip", "lily", "jasmine", "daisy", "rose", "marigold"]],
+      ["animal", ["otter", "mole", "hedgehog", "walrus", "giraffe", "buffalo"]]
+    ];
+
+    const pick = arr => arr[rnd(0, arr.length - 1)];
+    // Build a 4-option multiple choice: the answer plus distractors, shuffled.
+    const choiceQ = (q, answer, distractors) => ({
+      q, a: answer, type: "choice", options: shuffle([answer, ...distractors])
+    });
+    const otherThan = (arr, notThese, n) =>
+      shuffle(arr.filter(x => !notThese.includes(x))).slice(0, n);
+
+    const GRAMMAR_SKILLS = [
+      {
+        id: "nounSpot",
+        label: "Find the noun",
+        gen() {
+          const noun = pick(COMMON_NOUNS);
+          return choiceQ("Which of these words is a noun (a naming word)?", noun,
+            [...otherThan(VERBS, [], 2), pick(ADJECTIVES)]);
+        }
+      },
+      {
+        id: "properNoun",
+        label: "Common or proper",
+        gen() {
+          const proper = Math.random() < 0.5;
+          const answer = proper ? pick(PROPER_NOUNS) : pick(COMMON_NOUNS);
+          const others = otherThan(proper ? COMMON_NOUNS : PROPER_NOUNS, [answer], 3);
+          return choiceQ(`Which of these is a ${proper ? "proper" : "common"} noun?`, answer, others);
+        }
+      },
+      {
+        id: "capitals",
+        label: "Capital letters",
+        gen() {
+          const name = pick(PEOPLE);
+          const place = pick(PLACE_NAMES);
+          const right = `${name} lives in ${place}.`;
+          return choiceQ("Which sentence is written correctly?", right, [
+            right.toLowerCase(),
+            `${name.toLowerCase()} lives in ${place}.`,
+            `${name} lives in ${place.toLowerCase()}.`
+          ]);
+        }
+      },
+      {
+        id: "article",
+        label: "a or an",
+        gen() {
+          const [word, art] = pick(ARTICLE_WORDS);
+          return choiceQ(`Choose the correct word: ___ ${word}`, art, [art === "a" ? "an" : "a"]);
+        }
+      },
+      {
+        id: "plural",
+        label: "Singular → plural",
+        gen() {
+          const [one, many] = pick(PLURALS);
+          const fakes = [one + "s", one + "es", one.replace(/y$/, "ies"), one + "ies"]
+            .filter(f => f !== many);
+          return choiceQ(`What is the plural of "${one}"?`, many, otherThan(fakes, [many], 3));
+        }
+      },
+      {
+        id: "pluralSentence",
+        label: "Plural in a sentence",
+        gen() {
+          const [one, many] = pick(PLURALS.filter(([o, m]) => o !== m));
+          const frames = [
+            n => `I can see three ___ in the garden. (${one})`,
+            n => `There are many ___ in our school. (${one})`,
+            n => `My friend has two ___ at home. (${one})`
+          ];
+          const fakes = [one, one + "s", one + "es"].filter(f => f !== many);
+          return choiceQ(pick(frames)(one), many, otherThan(fakes, [many], 2));
+        }
+      },
+      {
+        id: "feminine",
+        label: "Masculine & feminine",
+        gen() {
+          const [m, f] = pick(GENDER_PAIRS);
+          const toFeminine = Math.random() < 0.5;
+          const answer = toFeminine ? f : m;
+          const pool = GENDER_PAIRS.map(pair => toFeminine ? pair[1] : pair[0]);
+          return choiceQ(
+            `What is the ${toFeminine ? "feminine" : "masculine"} of "${toFeminine ? m : f}"?`,
+            answer, otherThan(pool, [answer], 3));
+        }
+      },
+      {
+        id: "genderType",
+        label: "Which gender?",
+        gen() {
+          const kinds = [
+            ["masculine", GENDER_PAIRS.map(p => p[0])],
+            ["feminine", GENDER_PAIRS.map(p => p[1])],
+            ["common", COMMON_GENDER],
+            ["neuter", NEUTER_GENDER]
+          ];
+          const [kind, words] = pick(kinds);
+          return {
+            q: `What gender is the noun "${pick(words)}"?`,
+            a: kind,
+            type: "choice",
+            options: ["masculine", "feminine", "common", "neuter"]
+          };
+        }
+      },
+      {
+        id: "collective",
+        label: "Collective nouns",
+        gen() {
+          const [group, word] = pick(COLLECTIVE);
+          const pool = [...new Set(COLLECTIVE.map(c => c[1]))];
+          return choiceQ(`Choose the collective noun: a ___ of ${group}`, word,
+            otherThan(pool, [word], 3));
+        }
+      },
+      {
+        id: "material",
+        label: "Material nouns",
+        gen() {
+          const [thing, stuff] = pick(MATERIAL);
+          const pool = [...new Set(MATERIAL.map(m => m[1]))];
+          return choiceQ(`Choose the material noun: a ${thing} is usually made of ___`, stuff,
+            otherThan(pool, [stuff], 3));
+        }
+      },
+      {
+        id: "sortWords",
+        label: "Which group?",
+        gen() {
+          const [kind, words] = pick(CATEGORIES);
+          const answer = pick(words);
+          const others = shuffle(CATEGORIES.filter(c => c[0] !== kind))
+            .slice(0, 3).map(c => pick(c[1]));
+          return choiceQ(`Which of these is a ${kind}?`, answer, others);
+        }
+      }
+    ];
+
     // Every practice activity is one entry here plus one <section> / controls
     // block in the markup. Adding an activity should need nothing else.
     //   scene / controls / extras : element ids shown only while it is active
@@ -780,6 +989,33 @@
         }
       },
       {
+        id: "grammarPractice",
+        group: "English",
+        icon: "🔤",
+        label: "Grammar practice",
+        subtitle: "Pick a topic and answer as many questions as you like",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        extras: ["skillFilter"],
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: GRAMMAR_SKILLS, bankId: "grammar", test: false }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "grammarTest",
+        group: "English",
+        icon: "🧾",
+        label: "Grammar test (10 questions)",
+        subtitle: "Ten mixed questions — you get a score at the end",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: GRAMMAR_SKILLS, bankId: "grammar", test: true, length: 10 }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
         id: "mathPractice",
         group: "Math",
         icon: "🔢",
@@ -790,7 +1026,7 @@
         controls: "mathControls",
         extras: ["skillFilter"],
         usesDeck: false,
-        onEnter: () => startQuiz({ test: false }),
+        onEnter: () => startQuiz({ bank: MATH_SKILLS, bankId: "math", test: false }),
         onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
       },
       {
@@ -803,7 +1039,7 @@
         scene: "mathScene",
         controls: "mathControls",
         usesDeck: false,
-        onEnter: () => startQuiz({ test: true, length: 10 }),
+        onEnter: () => startQuiz({ bank: MATH_SKILLS, bankId: "math", test: true, length: 10 }),
         onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
       }
     ];
@@ -982,34 +1218,39 @@
     // ---------------- maths quiz engine ----------------
     // Practice mode: endless questions from one skill (or a mix).
     // Test mode: a fixed-length mixed paper that ends with a score.
-    let quiz = { skill: "mix", test: false, length: 0, asked: 0, done: 0, correct: 0, q: null, answered: false, over: false };
+    let quiz = { bank: [], skill: "mix", test: false, length: 0, asked: 0, done: 0, correct: 0, q: null, answered: false, over: false };
+    // One remembered skill per bank, so switching sections keeps your place.
+    const lastSkill = {};
 
     function buildSkillChips() {
       skillFilterEl.innerHTML = "";
-      [{ id: "mix", label: "Mixed" }, ...MATH_SKILLS].forEach(s => {
+      [{ id: "mix", label: "Mixed" }, ...quiz.bank].forEach(s => {
         const b = document.createElement("button");
         b.className = "tab set" + (s.id === quiz.skill ? " active" : "");
         b.dataset.skill = s.id;
         b.textContent = s.label;
         b.addEventListener("click", () => {
-          quiz.skill = s.id;
-          buildSkillChips();
-          startQuiz({ test: quiz.test, length: quiz.length });
+          lastSkill[quiz.bankId] = s.id;
+          startQuiz({ bank: quiz.bank, bankId: quiz.bankId, test: quiz.test, length: quiz.length });
         });
         skillFilterEl.appendChild(b);
       });
     }
 
-    function startQuiz({ test, length = 0 }) {
-      quiz = { skill: test ? "mix" : quiz.skill, test, length, asked: 0, done: 0, correct: 0, q: null, answered: false, over: false };
+    function startQuiz({ bank, bankId, test, length = 0 }) {
+      quiz = {
+        bank, bankId,
+        skill: test ? "mix" : (lastSkill[bankId] || "mix"),
+        test, length, asked: 0, done: 0, correct: 0, q: null, answered: false, over: false
+      };
       buildSkillChips();
       newQuestion();
     }
 
     function newQuestion() {
       const pool = quiz.skill === "mix"
-        ? MATH_SKILLS
-        : MATH_SKILLS.filter(s => s.id === quiz.skill);
+        ? quiz.bank
+        : quiz.bank.filter(s => s.id === quiz.skill);
       const skill = pool[rnd(0, pool.length - 1)];
       const q = skill.gen();
       quiz.q = { ...q, type: q.type || "number", skill };
@@ -1054,12 +1295,13 @@
     }
 
     function checkAnswer() {
-      if (quiz.over) { startQuiz({ test: quiz.test, length: quiz.length }); return; }
+      if (quiz.over) { startQuiz({ bank: quiz.bank, bankId: quiz.bankId, test: quiz.test, length: quiz.length }); return; }
       if (quiz.answered) { nextQuestion(); return; }
 
       const given = quiz.q.type === "choice" ? quiz.picked : ansInputEl.value.trim();
       if (given === null || given === "") return;
-      const right = String(given) === String(quiz.q.a);
+      const norm = v => String(v).trim().toLowerCase();
+      const right = norm(given) === norm(quiz.q.a);
       quiz.answered = true;
       quiz.done++;
       if (right) quiz.correct++;
@@ -1072,7 +1314,7 @@
     }
 
     function nextQuestion() {
-      if (quiz.over) { startQuiz({ test: quiz.test, length: quiz.length }); return; }
+      if (quiz.over) { startQuiz({ bank: quiz.bank, bankId: quiz.bankId, test: quiz.test, length: quiz.length }); return; }
       if (quiz.test && quiz.asked >= quiz.length && quiz.answered) { finishTest(); return; }
       newQuestion();
     }
@@ -1159,7 +1401,7 @@
     checkBtn.addEventListener("click", checkAnswer);
     document.getElementById("nextQBtn").addEventListener("click", nextQuestion);
     document.getElementById("restartBtn").addEventListener("click", () =>
-      startQuiz({ test: quiz.test, length: quiz.length }));
+      startQuiz({ bank: quiz.bank, bankId: quiz.bankId, test: quiz.test, length: quiz.length }));
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeDrawer();
       const handler = activity().onKey;
