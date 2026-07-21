@@ -293,6 +293,9 @@
     const counterEl = document.getElementById("counter");
     const autoSpeakEl = document.getElementById("autoSpeak");
 
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+      || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
     let hindiVoice = null;
     function pickVoice() {
       const voices = speechSynthesis.getVoices();
@@ -317,8 +320,30 @@
       speechSynthesis.speak(utter);
     }
 
+    // iOS blocks speechSynthesis until it has been primed inside a real user
+    // gesture, so prime it with an empty utterance on the first touch/click.
+    let speechUnlocked = false;
+    function unlockSpeech() {
+      if (speechUnlocked || !("speechSynthesis" in window)) return;
+      speechUnlocked = true;
+      const warmup = new SpeechSynthesisUtterance("");
+      warmup.volume = 0;
+      speechSynthesis.speak(warmup);
+      pickVoice();
+    }
+    document.addEventListener("touchend", unlockSpeech, { once: true });
+    document.addEventListener("click", unlockSpeech, { once: true });
+    document.addEventListener("keydown", unlockSpeech, { once: true });
+
     const ttsAudio = new Audio();
     function speak(text) {
+      // On iOS the HTML5 audio path is silenced by the ringer switch and the
+      // async play() fallback runs too late to keep the user-gesture context,
+      // so go straight to speechSynthesis there.
+      if (isIOS) {
+        speakBrowser(text);
+        return;
+      }
       const url = "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=hi&client=gtx&q="
         + encodeURIComponent(text);
       ttsAudio.onerror = () => speakBrowser(text);
