@@ -571,8 +571,8 @@
     </div>
   </main>
 
-  <!-- Reading text: chapter.js provides public sample chapters. A local
-       chapters.js (kept out of the public repo) may override them. -->
+  <!-- Reading text: chapter.js defines window.ENGLISH_CHAPTERS. chapters.js, if
+       present, overrides it so local edits can be kept separate. -->
   <script src="chapter.js"></script>
   <script src="chapters.js"></script>
   <script>
@@ -1615,9 +1615,8 @@
     }
 
     // ---------------- reading view ----------------
-    // chapter.js provides public sample chapters. A local, private chapters.js
-    // (kept out of the public repo) may override them by redefining
-    // window.ENGLISH_CHAPTERS = [{id,title,author,type,paragraphs:[...]}].
+    // chapter.js defines window.ENGLISH_CHAPTERS = [{id,title,author,type,
+    // paragraphs:[...]}]. A local chapters.js may override it.
     const chapters = () => Array.isArray(window.ENGLISH_CHAPTERS) ? window.ENGLISH_CHAPTERS : [];
     let currentChapter = 0;
     let readAloudChunks = [], readAloudIdx = 0, reading = false;
@@ -1643,8 +1642,8 @@
         readMetaEl.textContent = "";
         const p = document.createElement("p");
         p.className = "empty";
-        p.textContent = "The reading chapters are not loaded on this version. "
-          + "They live in a private chapters.js file kept off the public site.";
+        p.textContent = "No reading chapters are loaded. "
+          + "Add them to chapter.js (or a local chapters.js file).";
         readBodyEl.appendChild(p);
         readerControlsEl.classList.add("hidden");
         counterEl.textContent = "";
