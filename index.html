@@ -937,6 +937,125 @@
       }
     ];
 
+    // ---------------- Social Studies fact bank ----------------
+    // The SST book is factual (class-3 "Understanding Changes": family and
+    // adapting to change), so each topic is a fixed list of hand-checked
+    // question / answer / wrong-option sets rather than a generator. Wrapping
+    // each topic as a skill lets it reuse the same quiz engine as maths.
+    const SST_TOPICS = [
+      { id: "family", label: "Family & relatives", facts: [
+        ["What is a family?", "A group of people who are related to each other",
+          ["A group of neighbours who live nearby", "A group of classmates in school", "A group of people who work together"]],
+        ["What do we call people who belong to the same family?", "Relatives",
+          ["Strangers", "Neighbours", "Guests"]],
+        ["Do all family members have to live in the same house?", "No, they may or may not live together",
+          ["Yes, always in one house", "Only if they are twins", "Only during festivals"]],
+        ["Who among these is usually NOT a family member?", "A neighbour",
+          ["Father", "Grandmother", "Cousin"]],
+        ["What do family members do for each other?", "Take care of each other and share joys and sorrows",
+          ["Compete against each other", "Live far apart always", "Never meet each other"]]
+      ]},
+      { id: "familyTypes", label: "Types of families", facts: [
+        ["In which family do grandparents, parents, aunts, uncles and children all live together?", "Joint family",
+          ["Nuclear family", "Single-parent family", "School family"]],
+        ["A family with only parents and their children is called a __.", "Nuclear family",
+          ["Joint family", "Single-parent family", "Grand family"]],
+        ["What is a family called where children live with only one parent?", "Single-parent family",
+          ["Joint family", "Nuclear family", "Twin family"]],
+        ["In a nuclear family, who takes care of the children?", "Only the parents",
+          ["Only the grandparents", "Only the uncles and aunts", "Only a hired helper"]],
+        ["Which type of family do we see more often nowadays?", "Nuclear family",
+          ["Joint family", "Single-parent family", "Royal family"]],
+        ["How many types of families does the book describe?", "Three",
+          ["Two", "Four", "Five"]]
+      ]},
+      { id: "generations", label: "Generations & family tree", facts: [
+        ["What is a generation?", "People born and living around the same time",
+          ["People living in the same house", "People with the same birthday", "People in the same school"]],
+        ["What does a family tree show?", "How family members and generations are related",
+          ["The address of the family", "The jobs of the family", "The birthdays of the family"]],
+        ["Relatives from the father's side are called __.", "Paternal relatives",
+          ["Maternal relatives", "Nuclear relatives", "Joint relatives"]],
+        ["Relatives from the mother's side are called __.", "Maternal relatives",
+          ["Paternal relatives", "Single relatives", "Distant relatives"]],
+        ["Features passed from one generation to the next are called __.", "Hereditary features",
+          ["Adopted features", "Traditional features", "New features"]]
+      ]},
+      { id: "familySize", label: "Changes in family size", facts: [
+        ["Which of these adds a new member to a family?", "Birth, adoption or marriage",
+          ["Buying a new house", "Changing schools", "Getting a new job"]],
+        ["Two babies born to the mother at the same time are called __.", "Twins",
+          ["Triplets", "Cousins", "Siblings"]],
+        ["Three babies born to the mother at the same time are called __.", "Triplets",
+          ["Twins", "Cousins", "Relatives"]],
+        ["Taking a child not born to you into your family is called __.", "Adoption",
+          ["Marriage", "Transfer", "Promotion"]],
+        ["Which of these can make a family smaller?", "A member moving away or a death in the family",
+          ["A birthday party", "A family holiday", "Buying a fridge"]],
+        ["A joint family often becomes a __ when members move out.", "Nuclear family",
+          ["Single-parent family", "Bigger joint family", "School family"]]
+      ]},
+      { id: "adapting", label: "Adapting to changes", facts: [
+        ["Adjustments we make in response to changes around us are called __.", "Adaptation",
+          ["Promotion", "Tradition", "Tension"]],
+        ["How often do changes happen around us?", "All the time",
+          ["Once a year", "Only in summer", "Never"]],
+        ["How do most children feel on their first day at a new school?", "Shy or uncomfortable at first",
+          ["Completely relaxed", "Angry", "Bored"]],
+        ["What helps a child settle into a new school?", "Making new friends and getting used to teachers",
+          ["Skipping classes", "Avoiding classmates", "Staying at home"]],
+        ["What is the way a person lives called?", "Lifestyle",
+          ["Locality", "Generation", "Household"]]
+      ]},
+      { id: "neighbourhood", label: "Changing neighbourhood", facts: [
+        ["Why might a family move to a new neighbourhood?", "For better facilities or a parent's transfer",
+          ["To collect stamps", "To watch more TV", "To avoid festivals"]],
+        ["What do we usually do in a new neighbourhood?", "Make new friends and learn new ways of living",
+          ["Stop talking to everyone", "Forget our family", "Never go outside"]],
+        ["Why do different regions have different food habits?", "Because food depends on the crops grown there",
+          ["Because people dislike other food", "Because of the school", "Because of the day of the week"]],
+        ["Moving from north to south India, people often start liking __.", "Idli, dosa and sambar",
+          ["Rajma and rice", "Chole bhature", "Litti chokha"]]
+      ]},
+      { id: "lifestyle", label: "Food, clothes & houses", facts: [
+        ["What kind of clothes do people wear in cold places?", "Woollen clothes",
+          ["Cotton clothes", "Silk clothes", "No extra clothes"]],
+        ["What kind of clothes do people wear in warm places?", "Cotton clothes",
+          ["Woollen clothes", "Leather clothes", "Fur clothes"]],
+        ["What is a crèche?", "A nursery that looks after young children",
+          ["A type of house", "A type of school bus", "A type of festival"]],
+        ["Why do many people today prefer apartments?", "Less space, nuclear families and lower cost",
+          ["Apartments are always bigger", "Apartments have farmland", "Apartments are in villages"]],
+        ["People wear clothes according to the __.", "Climate of the place",
+          ["Colour they dislike", "Day of the week", "Price of food"]]
+      ]},
+      { id: "pastPresent", label: "Past vs present", facts: [
+        ["What did people mostly travel by in earlier times?", "Bullock carts and tongas",
+          ["Trains and aeroplanes", "Only bicycles", "Only motorbikes"]],
+        ["What do people mostly travel by nowadays?", "Trains, buses and aeroplanes",
+          ["Bullock carts", "Tongas", "Horses"]],
+        ["Gas and induction stoves have replaced which older stoves?", "Mud and kerosene stoves",
+          ["Electric stoves", "Solar stoves", "Microwave ovens"]],
+        ["Which clothes from olden times are now worn mostly on special occasions?", "Saree, dhoti and kurta-pyjama",
+          ["T-shirts and jeans", "Shorts and caps", "Raincoats and boots"]],
+        ["In earlier times, who mainly earned money for the family?", "The male members",
+          ["Only children", "Only grandparents", "Everyone equally"]],
+        ["Which appliance has become an essential part of the kitchen today?", "The fridge",
+          ["The typewriter", "The bullock cart", "The gramophone"]]
+      ]}
+    ];
+
+    // Turn each fact topic into a quiz skill: gen() picks a random fact and
+    // shuffles its options. Distractors are curated, so no recompute needed.
+    const SST_SKILLS = SST_TOPICS.map(topic => ({
+      id: topic.id,
+      label: topic.label,
+      gen() {
+        const [q, a, distractors] = pick(topic.facts);
+        return choiceQ(q, a, distractors);
+      }
+    }));
+
     // Every practice activity is one entry here plus one <section> / controls
     // block in the markup. Adding an activity should need nothing else.
     //   scene / controls / extras : element ids shown only while it is active
@@ -1013,6 +1132,33 @@
         controls: "mathControls",
         usesDeck: false,
         onEnter: () => startQuiz({ bank: GRAMMAR_SKILLS, bankId: "grammar", test: true, length: 10 }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "sstPractice",
+        group: "Social Studies",
+        icon: "🌍",
+        label: "Social Studies practice",
+        subtitle: "Pick a topic and answer as many questions as you like",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        extras: ["skillFilter"],
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: SST_SKILLS, bankId: "sst", test: false }),
+        onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
+      },
+      {
+        id: "sstTest",
+        group: "Social Studies",
+        icon: "🗺️",
+        label: "Social Studies test (10 questions)",
+        subtitle: "Ten mixed questions — you get a score at the end",
+        footer: "Keyboard: Enter · Check / Next question",
+        scene: "mathScene",
+        controls: "mathControls",
+        usesDeck: false,
+        onEnter: () => startQuiz({ bank: SST_SKILLS, bankId: "sst", test: true, length: 10 }),
         onKey(e) { if (e.key === "Enter") { e.preventDefault(); checkAnswer(); } }
       },
       {
